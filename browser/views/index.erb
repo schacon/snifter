@@ -4,7 +4,7 @@
     <table>
     <% last_time = 0 %>
     <% @sessions.each do |sess, req, res, time| %>
-      <% if (time - last_time) > 2 %>
+      <% if (time - last_time) > 3 %>
         <tr><td colspan="2"><hr/></td></tr>
       <% end %>
       <% last_time = time %>

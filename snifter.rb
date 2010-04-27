@@ -9,12 +9,12 @@ class Snifter
   LIST_ID = 'snifter-conn-list'
 
   def conn_id(conn)
-    'snifter-conn-' + conn.object_id.to_s
+    'snifter-conn-' + conn.to_s
   end
 
   def update_list(id)
     @redis.rpush LIST_ID, id
-    @redis.ltrim LIST_ID, -50, -1
+    @redis.ltrim LIST_ID, -30, -1
   end
 
   def log_connect(conn)
@@ -25,7 +25,7 @@ class Snifter
   def add_data(conn, type, data)
     cid = conn_id(conn) + type
     if predata = @redis.get(cid)
-      data = predata + data
+      data = predata.to_s + data.to_s
     end
     @redis.set cid, data 
   end
@@ -39,7 +39,7 @@ class Snifter
   end
 
   def log_finish(conn, backend, name)
-    p [:on_finish, conn.object_id]
+    p [:on_finish, conn]
   end
 
   def current

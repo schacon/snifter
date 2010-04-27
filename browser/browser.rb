@@ -35,13 +35,21 @@ def process_http(req)
   http = headers.shift
   harr = headers.map { |h| h.split(': ') }
 
-  req = REXML::Document.new(xml)
-  r = ""
-  req.write(r, 3)
-  div = CodeRay.scan(r, :xml).div
+  begin
+    req = REXML::Document.new(xml)
+    r = ""
+    req.write(r, 3)
+    div = CodeRay.scan(r, :xml).div
+  rescue
+    div = CodeRay.scan(xml, :xml).div
+  end
 
-  n = Nokogiri.XML(xml)
-  values = get_values([n.root.name], n.root, [])
+  begin
+    n = Nokogiri.XML(xml)
+    values = get_values([n.root.name], n.root, [])
+  rescue
+    values = []
+  end
 
   { :headers => harr, :body => div, 
     :header_raw => header, :body_raw => xml,
@@ -51,6 +59,8 @@ end
 
 def get_line(data)
   data.split("\n").first.gsub("HTTP/1.1", '')
+rescue
+  'fu'
 end
 
 get '/' do

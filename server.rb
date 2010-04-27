@@ -2,30 +2,36 @@ require 'rubygems'
 require 'em-proxy'
 
 require 'snifter'
+require 'pp'
 
 @snifter = Snifter.new
 
-Proxy.start(:host => "0.0.0.0", :port => 5201, :debug => false) do |conn|
-  conn.server :srv, :host => "127.0.0.1", :port => 5200
+listen_port = 5202
+host_to = ['127.0.0.1', 80]
 
-  conn.on_connect do
-    @snifter.log_connect(conn)
-  end
+@@sessions = {}
+
+Proxy.start(:host => "0.0.0.0", :port => listen_port, :debug => false) do |conn|
+  conn.server :srv, :host => host_to[0], :port => host_to[1]
 
   # modify / process request stream
   conn.on_data do |data|
-    @snifter.log_data(conn, data)
+    if id = @@sessions[conn.object_id]
+      id = conn.object_id.to_s + rand(1000).to_s
+      @@sessions[conn.object_id] = id
+    else
+      id = @@sessions[conn.object_id] = conn.object_id
+    end
+    @snifter.log_connect(id)
+    @snifter.log_data(id, data)
     data
   end
 
   # modify / process response stream
   conn.on_response do |backend, resp|
-    @snifter.log_response(conn, backend, resp)
+    id = @@sessions[conn.object_id]
+    @snifter.log_response(id, backend, resp)
     resp
   end
 
-  # termination logic
-  conn.on_finish do |backend, name|
-    @snifter.log_finish(conn, backend, name)
-  end
 end
