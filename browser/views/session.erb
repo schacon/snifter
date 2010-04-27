@@ -1,0 +1,49 @@
+<table cellspacing="0" cellpadding="0" class="headers">
+  <% @req[:headers].each do |k, v| %>
+    <tr>
+      <th><%= k %></th>
+      <td><%= v %></td>
+    </tr>
+  <% end %>
+</table>
+<br/>
+<table cellspacing="0" cellpadding="0" class="xmlbody">
+  <% @req[:body_values].each do |k, v| %>
+    <tr>
+      <th><%= k %></th>
+      <td><%= v %></td>
+    </tr>
+  <% end %>
+</table>
+
+<div id="req-body" style="display: none">
+  <%= @req[:body] %>
+</div>
+<a onClick="$('#req-body').toggle()" href="#" id="view-req-body" class="details">details</a>
+
+<hr/>
+
+<table cellspacing="0" cellpadding="0" class="headers">
+  <% @res[:headers].each do |k, v| %>
+    <tr>
+      <th><%= k %></th>
+      <td><%= v %></td>
+    </tr>
+  <% end %>
+</table>
+<br/>
+<table cellspacing="0" cellpadding="0" class="xmlbody">
+  <% @res[:body_values].each do |k, v| %>
+    <tr>
+      <th><%= k %></th>
+      <td><%= v %></td>
+    </tr>
+  <% end %>
+</table>
+
+<div id="res-body" style="display: none">
+  <%= @res[:body] %>
+</div>
+<a onClick="$('#res-body').toggle()" href="#" id="view-res-body" class="details">details</a>
+
+
