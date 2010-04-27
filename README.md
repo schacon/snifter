@@ -12,7 +12,7 @@ It currently assumes all the data will be XML based and will simplify the XML da
 for simpler comparison, but you can also click on 'details' to see the full, syntax
 highlighted XML.
 
-![screenshot](http://img.skitch.com/20100427-r6i1chj9jhpbnhs2prracptgjt.jpg)
+![screenshot](http://img.skitch.com/20100427-j724ebpkt73ere62pb4usayi43.jpg)
 
 ToDo
 ================
