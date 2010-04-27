@@ -5,6 +5,7 @@ h1 {
 
 #results { padding: 0 20px; }
 .details { font-size: 80%; }
+a.session { color: #363; }
 
 table.headers { 
   font-family: monospace;

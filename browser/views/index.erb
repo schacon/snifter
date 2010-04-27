@@ -2,7 +2,12 @@
   <tr><td valign="top">
     <h1>Sessions</h1>
     <table>
-    <% @sessions.each do |sess, req, res| %>
+    <% last_time = 0 %>
+    <% @sessions.each do |sess, req, res, time| %>
+      <% if (time - last_time) > 2 %>
+        <tr><td colspan="2"><hr/></td></tr>
+      <% end %>
+      <% last_time = time %>
       <tr>
         <td nowrap><a class="session" href="#" rel="/sess/<%= sess %>"><%= req %></a></td>
         <td nowrap><%= res %></td>

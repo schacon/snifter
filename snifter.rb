@@ -14,10 +14,11 @@ class Snifter
 
   def update_list(id)
     @redis.rpush LIST_ID, id
-    @redis.ltrim LIST_ID, -10, -1
+    @redis.ltrim LIST_ID, -50, -1
   end
 
   def log_connect(conn)
+    add_data(conn, 'time', Time.now.to_i)
     update_list(conn_id(conn))
   end
 
@@ -48,7 +49,8 @@ class Snifter
   def session(session)
     req = @redis.get session + 'request'
     res = @redis.get session + 'response'
-    [req, res]
+    time = @redis.get session + 'time'
+    [req, res, time.to_i]
   end
 
   def show_stats

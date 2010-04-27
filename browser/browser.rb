@@ -58,10 +58,10 @@ get '/' do
   @sessions = []
   sessions = @snifter.current
   sessions.each do |sess|
-    req, res = @snifter.session(sess)
+    req, res, time = @snifter.session(sess)
     req = get_line(req)
     res = get_line(res)
-    @sessions << [sess, req, res]
+    @sessions << [sess, req, res, time]
   end
   erb :index
 end
