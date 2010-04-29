@@ -1,0 +1,60 @@
+<h1>Compare Detail</h1>
+
+<table><tr>
+<% @sessions.each do |req, res| %>
+  <td valign="top">
+
+  <h4><code><%= req[:http] %></code></h4>
+  <table cellspacing="0" cellpadding="0" class="headers">
+    <% req[:headers].each do |k, v| %>
+      <tr>
+        <th><%= k %></th>
+        <td><%= v %></td>
+      </tr>
+    <% end %>
+  </table>
+  <br/>
+  <table cellspacing="0" cellpadding="0" class="xmlbody">
+    <% req[:body_values].each do |k, v| %>
+      <tr>
+        <th><%= k %></th>
+        <td><%= v %></td>
+      </tr>
+    <% end %>
+  </table>
+
+  <div class="req-body" style="display: none">
+    <%= req[:body] %>
+  </div>
+  <a onClick="$('.req-body').toggle(); return false" href="#" id="view-req-body" class="details">details</a>
+
+  <hr/>
+
+  <table cellspacing="0" cellpadding="0" class="headers">
+    <% res[:headers].each do |k, v| %>
+      <tr>
+        <th><%= k %></th>
+        <td><%= v %></td>
+      </tr>
+    <% end %>
+  </table>
+  <br/>
+  <table cellspacing="0" cellpadding="0" class="xmlbody">
+    <% res[:body_values].each do |k, v| %>
+      <tr>
+        <th><%= k %></th>
+        <td><%= v %></td>
+      </tr>
+    <% end %>
+  </table>
+
+  <div class="res-body" style="display: none">
+    <%= res[:body] %>
+    <hr/>
+    <%= CGI::escapeHTML(res[:body_raw]) %>
+  </div>
+  <a onClick="$('.res-body').toggle(); return false" href="#" id="view-res-body" class="details">details</a>
+
+  </td>
+<% end %>
+</tr></table>

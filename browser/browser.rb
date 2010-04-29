@@ -35,9 +35,9 @@ def process_http(req)
   http = headers.shift
   harr = headers.map { |h| h.split(': ') }
 
+  r = ""
   begin
     req = REXML::Document.new(xml)
-    r = ""
     req.write(r, 3)
     div = CodeRay.scan(r, :xml).div
   rescue
@@ -45,9 +45,10 @@ def process_http(req)
   end
 
   begin
-    n = Nokogiri.XML(xml)
+    n = Nokogiri.XML(r)
     values = get_values([n.root.name], n.root, [])
-  rescue
+  rescue Object => e
+    puts e.message
     values = []
   end
 
@@ -68,9 +69,10 @@ def url_filter(url, id)
   base = @vars[group]['base']
   act = @vars[group]['act']
   ver = @vars[group]['ver']
-  url = url.gsub(base, '<span class="base">[base]</span>')
-  url = url.gsub(act, '<span class="act">[act]</span>')
-  url = url.gsub(ver, '<span class="ver">[ver]</span>')
+  url = url.gsub(base, '<span class="base">[base]</span>') if base
+  url = url.gsub(act, '<span class="act">[act]</span>') if act
+  url = url.gsub(ver, '<span class="ver">[ver]</span>') if ver
+  url
 end
 
 get '/' do
@@ -141,6 +143,18 @@ get '/compare' do
     @compare << group
   end
   erb :compare
+end
+
+get '/comparetwo/:one/:two' do
+  @snifter = Snifter.new
+  @sessions = []
+  [params[:one], params[:two]].each do |sess|
+    req, res = @snifter.session(sess)
+    req = process_http(req)
+    res = process_http(res)
+    @sessions << [req, res]
+  end
+  erb :compare_detail
 end
 
 get '/clear_groups' do

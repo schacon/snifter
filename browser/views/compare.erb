@@ -7,7 +7,7 @@
   <% sess, req, res, time = data %>
   <% sessB, reqB, resB, timeB = @compare[1][i] %>
   <tr>
-    <td rowspan="2"><input type="radio" name="compare"></td>
+    <td rowspan="2"><input rel="comparetwo/<%= sess %>/<%= sessB %>" class="comparetwo" type="radio" name="compare"></td>
     <td><code><%= url_filter req, 0 %></code></td>
     <td><%= res %></td>
   </tr>
@@ -17,3 +17,14 @@
   </tr>
 <% end %>
 </table>
+
+
+<div id="results"></div>
+
+<script type="text/javascript">
+  $(function(){
+      $(".comparetwo").click(function() {
+        $("#results").load($(this).attr('rel'))
+      })
+  })
+</script>
