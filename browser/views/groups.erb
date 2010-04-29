@@ -1,0 +1,16 @@
+<h1>Groups</h1>
+
+<form action="compare">
+
+<table>
+<% @groups.each do |group| %>
+  <tr>
+    <td><input name="sessA" value="<%= group %>" type="checkbox"/></td>
+    <td><%= group %></td>
+    <td><input name="sessB" value="<%= group %>" type="checkbox"/></td>
+  </tr>
+<% end %>
+</table>
+<input type="submit">
+
+</form>

@@ -6,8 +6,13 @@ require 'pp'
 
 @snifter = Snifter.new
 
-listen_port = 5202
-host_to = ['127.0.0.1', 80]
+from_port = ARGV[0].to_i
+to_port = ARGV[1].to_i
+
+puts "Proxying from #{from_port} to #{to_port}"
+
+listen_port = from_port
+host_to = ['127.0.0.1', to_port]
 
 @@sessions = {}
 

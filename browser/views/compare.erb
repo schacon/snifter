@@ -1,0 +1,19 @@
+<h1>Compare</h1>
+
+<!-- Base URL, Activity ID, Version -->
+
+<table class="compare">
+<% @compare[0].each_with_index do |data, i| %>
+  <% sess, req, res, time = data %>
+  <% sessB, reqB, resB, timeB = @compare[1][i] %>
+  <tr>
+    <td rowspan="2"><input type="radio" name="compare"></td>
+    <td><code><%= url_filter req, 0 %></code></td>
+    <td><%= res %></td>
+  </tr>
+  <tr class="bottom">
+    <td><code><%= url_filter reqB, 1 %></code></td>
+    <td><%= resB %></td>
+  </tr>
+<% end %>
+</table>

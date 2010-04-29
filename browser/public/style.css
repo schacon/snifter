@@ -6,6 +6,9 @@ h1 {
 #results { padding: 0 20px; }
 .details { font-size: 80%; }
 a.session { color: #363; }
+.base { color: #833; }
+.act { color: #383; }
+.ver { color: #338; }
 
 table.headers { 
   font-family: monospace;
@@ -33,4 +36,8 @@ table.xmlbody tr th {
   text-align: left; 
   font-size: 90%;
   color: #833;
+}
+
+table.compare tr.bottom td { 
+  border-bottom: 1px solid #aaa;
 }

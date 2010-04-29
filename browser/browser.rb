@@ -63,6 +63,16 @@ rescue
   'fu'
 end
 
+def url_filter(url, id)
+  group = @groups[id]
+  base = @vars[group]['base']
+  act = @vars[group]['act']
+  ver = @vars[group]['ver']
+  url = url.gsub(base, '<span class="base">[base]</span>')
+  url = url.gsub(act, '<span class="act">[act]</span>')
+  url = url.gsub(ver, '<span class="ver">[ver]</span>')
+end
+
 get '/' do
   @snifter = Snifter.new
   @sessions = []
@@ -86,4 +96,55 @@ get '/sess/:sess' do
   erb :session
 end
 
+post '/create/:name' do
+  name = params[:name]
+  data = params[:sessions]
+  @snifter = Snifter.new
+  @snifter.save_group(name, data)
+end
+
+get '/groups' do
+  @snifter = Snifter.new
+  @groups = @snifter.groups
+  erb :groups
+end
+
+get '/compare' do
+  pp params
+  @snifter = Snifter.new
+  @compare = []
+  @vars = {}
+  @groups = [params[:sessA], params[:sessB]]
+  @groups.each do |grp|
+    sessions = @snifter.get_group(grp)
+    group = []
+    sessions.each do |sess|
+      req, res, time = @snifter.session(sess)
+      req = get_line(req)
+      res = get_line(res)
+
+      # check for variables for better comparison
+      if m = /OPTIONS (.*)/.match(req)
+        @vars[grp] ||= {}
+        @vars[grp]['base'] = m[1].strip
+      end
+      if m = /MKACTIVITY (.*?)\/act\/(.*)/.match(req)
+        @vars[grp] ||= {}
+        @vars[grp]['act'] = m[2].strip
+      end
+      if m = /CHECKOUT (.*?)\/!svn\/bln\/(.*)/.match(req)
+        @vars[grp] ||= {}
+        @vars[grp]['ver'] = m[2].strip
+      end
+      group << [sess, req, res, time]
+    end
+    @compare << group
+  end
+  erb :compare
+end
+
+get '/clear_groups' do
+  Snifter.new.clear_groups
+  "cleared"
+end
 

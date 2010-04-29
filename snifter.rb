@@ -7,6 +7,7 @@ class Snifter
   end
 
   LIST_ID = 'snifter-conn-list'
+  GROUP_ID = 'snifter-conn-group'
 
   def conn_id(conn)
     'snifter-conn-' + conn.to_s
@@ -44,6 +45,30 @@ class Snifter
 
   def current
     @redis.lrange LIST_ID, 0, -1;
+  end
+
+  def groups
+    @redis.lrange GROUP_ID, 0, -1;
+  end
+
+  def get_group(group)
+    @redis.lrange group, 0, -1;
+  end
+
+  def clear_groups
+    @redis.ltrim GROUP_ID, -1, -1
+  end
+
+  def save_group(name, data)
+    time = rand(1000).to_s
+    name = 'snifter_group_' + name + '_' + time
+
+    @redis.rpush GROUP_ID, name
+
+    data.each do |sess|
+      puts "PUSH #{name} #{sess}"
+      @redis.rpush name, sess
+    end
   end
 
   def session(session)
